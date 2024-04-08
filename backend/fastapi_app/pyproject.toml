@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "fastapiproject"
+version = "0.1.0"
+description = ""
+authors = ["dmitriy <dimaddf21@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.1"
+uvicorn = "^0.29.0"
+pydantic-settings = "^2.2.1"
+python-multipart = "^0.0.9"
+redis = "^5.0.3"
+taskiq = "^0.11.0"
+taskiq-nats = "^0.4.0"
+taskiq-redis = "^0.5.5"
+taskiq-fastapi = "^0.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

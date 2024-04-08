@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  frontend:
+    image: react_app
+    build:
+      context: ./frontend/
+      args:
+        BACKEND: "backend"
+    hostname: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_started
+      taskiq-worker:
+        condition: service_started
+      nats:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  backend:
+    &fastapi_app
+    image: fastapi_app
+    hostname: backend
+    build: ./backend/fastapi_app/
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/fastapi_app/.env
+    depends_on:
+      nats:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      taskiq-worker:
+        condition: service_started
+
+  taskiq-worker:
+    <<: *fastapi_app
+    ports: []
+    command: [taskiq, worker, src.core.tkq:broker]
+    depends_on:
+      nats:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  nats:
+    image: nats:2.10.12
+    hostname: nats
+    command:
+      - "-m"
+      - "8222"
+
+  redis:
+    image: redis:7.2.4
+    hostname: redis
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 50
