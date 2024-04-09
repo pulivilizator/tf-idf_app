@@ -16,3 +16,6 @@
   - react 18, react-query, mobx
   - HTML
   - CSS
+
+Выгляд это так:
+![image](https://github.com/pulivilizator/tf-idf_app/assets/112427972/f99ebecf-c9bf-42db-bfa7-9139f0e33d7e)
