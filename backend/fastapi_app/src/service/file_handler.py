@@ -21,7 +21,7 @@ async def process_get_table(file_key: str, other_keys: list[str]):
     logger.info('Processing get started')
     r = RedisDB()
     raw_count_words = await r.get_counter_words(file_key=file_key)
-    logger.info(f'raw_count_words:\n{raw_count_words}')
+    logger.info(f'raw_count_words ready')
     words_counter = [
         {
             'word': el.split(':')[0],
@@ -44,7 +44,6 @@ async def process_get_table(file_key: str, other_keys: list[str]):
 
 async def get_idfs(other_keys: list, words_counter: list, r: RedisDB) -> tuple[Any]:
     logger.info('idfs in process')
-    logger.info(f'idfs words_counter:\n{words_counter}')
     idfs = await asyncio.gather(
         *[
             asyncio.create_task(idf_for_word(word=word,
@@ -53,7 +52,7 @@ async def get_idfs(other_keys: list, words_counter: list, r: RedisDB) -> tuple[A
             for word in words_counter
         ]
     )
-    logger.info(f'idfs finished\nidfs:{idfs}')
+    logger.info(f'idfs finished')
 
     return idfs
 

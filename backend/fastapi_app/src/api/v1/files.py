@@ -25,8 +25,8 @@ async def create_file(file: Annotated[bytes, File()],
 
 @router.get("/table/{file_key}")
 async def get_table(keys: str, file_key: str = Path(...)):
-    keys = json.loads(keys)
     logger.info("getting table process")
+    keys = json.loads(keys)
     if not keys:
         logger.info('keys is not\nRETURNED')
         return
